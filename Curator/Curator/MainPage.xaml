@@ -4,11 +4,32 @@
              xmlns:local="clr-namespace:Curator"
              x:Class="Curator.MainPage">
 
-    <StackLayout>
-        <Button Text="Thumbs Up" VerticalOptions="FillAndExpand"/>
-        <Button Text="Thumbs Down" VerticalOptions="FillAndExpand"/>
-        <Button Text="Pause/Play" VerticalOptions="FillAndExpand"/>
-        <Button Text="Undo" VerticalOptions="FillAndExpand"/>
-    </StackLayout>
+    <RelativeLayout>
+
+        <Grid 
+            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Height,Factor=.7,Constant=0}"
+            RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Height,Factor=.3,Constant=0}"
+            RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Width,Factor=1,Constant=0}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Text="Thumb Down" />
+            <Button Text="Undo"  Grid.Column="1"/>
+            <Button Text="Thumb Up" Grid.Column="2"/>
+            <Button Text="Back" Grid.Row="1"/>
+            <Button Text="Pause/Play" Grid.Row="1" Grid.Column="1"/>
+            <Button Text="Skip" Grid.Row="1" Grid.Column="2"/>
+
+        </Grid>
+    </RelativeLayout>
 
 </ContentPage>
