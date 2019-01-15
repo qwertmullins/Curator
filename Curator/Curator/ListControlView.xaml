@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Curator.ListControlView">
+  <ContentView.Content>
+        <RelativeLayout>
+            <Label x:Name="CurrentTrackInfo"
+            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Width,Factor=.3,Constant=0}"
+            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Height,Factor=.35,Constant=0}"
+            >Current Song Info</Label>
+            <Grid 
+            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Height,Factor=.7,Constant=0}"
+            RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Height,Factor=.3,Constant=0}"
+            RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,
+            Property=Width,Factor=1,Constant=0}">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Text="Thumb Down" Clicked="OnThumbDown"/>
+                <Button Text="Undo"  Grid.Column="1" Clicked="OnUndo"/>
+                <Button Text="Thumb Up" Grid.Column="2" Clicked="OnThumbUp"/>
+                <Button Text="Back" Grid.Row="1" Clicked="OnBack"/>
+                <Button Text="Pause/Play" Grid.Row="1" Grid.Column="1" Clicked="OnPausePlay"/>
+                <Button Text="Skip" Grid.Row="1" Grid.Column="2" Clicked="OnSkip"/>
+            </Grid>
+        </RelativeLayout>
+    </ContentView.Content>
+</ContentView>
