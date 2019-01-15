@@ -1,49 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Curator
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ListControlView : ContentView
-	{
-		public ListControlView ()
-		{
-			InitializeComponent ();
-		}
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class ListControlView : ContentView
+    {
+        private ISongList _currentList;
+        private string _currentTrack;
+        private object _player;
 
-        private void OnThumbUp(object sender, System.EventArgs e)
+        public ListControlView()
         {
+            InitializeComponent();
         }
 
-        private void OnThumbDown(object sender, System.EventArgs e)
+        public void SetSongList(ISongList list)
         {
-
+            _currentList = list;
         }
 
-        private void OnUndo(object sender, System.EventArgs e)
+        private void OnThumbUp(object sender, EventArgs e)
         {
-
+            _currentList.ApproveTrack(_currentTrack);
         }
 
-        private void OnBack(object sender, System.EventArgs e)
+        private void OnThumbDown(object sender, EventArgs e)
         {
-
+            _currentList.ExcludeTrack(_currentTrack);
         }
 
-        private void OnPausePlay(object sender, System.EventArgs e)
+        private void OnUndo(object sender, EventArgs e)
         {
-
+            _currentList.Undo();
         }
 
-        private void OnSkip(object sender, System.EventArgs e)
+        private void OnBack(object sender, EventArgs e)
         {
+            _currentTrack = _currentList.GetPreviousTrack();
+            _player.Play(_currentTrack);
+        }
 
+        private void OnPausePlay(object sender, EventArgs e)
+        {
+            _player.PausePlay();
+        }
+
+        private void OnSkip(object sender, EventArgs e)
+        {
+            _currentTrack = _currentList.GetNextTrack();
+            _player.Play(_currentTrack);
         }
     }
 }
