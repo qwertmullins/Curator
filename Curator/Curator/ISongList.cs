@@ -7,6 +7,7 @@
 
         void ExcludeTrack(string track);
         void ApproveTrack(string track);
-        void Undo();
+        string Undo();
+        bool CanUndo { get; }
     }
 }

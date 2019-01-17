@@ -1,33 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Curator
 {
-    interface IPlaylist
-    {
-        string GetNextTrack();
-        string GetPreviousTrack();
-
-        void ApproveTrack(string track);
-        void ExcludeTrack(string track);
-    }
-
-    class Playlist : IPlaylist
+    class SongList : ISongList
     {
         private List<string> _tracks;
         private int currentIndex;
         private List<string> _approvedTracks;
         private List<string> _rawTracks;
         private List<string> _excludedTracks;
+        private Stack<Func<string>> _undoStack;
 
-        public Playlist(List<string> rawTracks, List<string> excludedTracks, List<string> approvedTracks)
+        public SongList(List<string> rawTracks, List<string> excludedTracks, List<string> approvedTracks)
         {
             _rawTracks = rawTracks;
             _excludedTracks = excludedTracks;
             _approvedTracks = approvedTracks;
             _tracks = rawTracks.Where(a => !_excludedTracks.Contains(a)).ToList();
+            _undoStack = new Stack<Func<string>>();
         }
 
         void IncrementCurrentTrack()
@@ -46,23 +38,52 @@ namespace Curator
         public string GetNextTrack()
         {
             IncrementCurrentTrack();
+            _undoStack.Push(() =>
+            {
+                DecrementCurrentTrack();
+                return _tracks[currentIndex];
+            });
             return _tracks[currentIndex];
         }
 
         public string GetPreviousTrack()
         {
             DecrementCurrentTrack();
+            _undoStack.Push(() =>
+            {
+                IncrementCurrentTrack();
+                return _tracks[currentIndex];
+            });
             return _tracks[currentIndex];
         }
 
         public void ApproveTrack(string track)
         {
             _approvedTracks.Add(track);
+            _undoStack.Push(() =>
+            {
+                _approvedTracks.Remove(track);
+                return null;
+            });
         }
 
         public void ExcludeTrack(string track)
         {
             _excludedTracks.Add(track);
+            _undoStack.Push(() =>
+            {
+                _excludedTracks.Remove(track);
+                return track;
+            });
         }
+
+        public string Undo()
+        {
+            if (CanUndo)
+                return _undoStack.Pop()();
+            throw new Exception("Tried to undo with nothing to undo!");
+        }
+
+        public bool CanUndo => _undoStack.Any();
     }
 }
