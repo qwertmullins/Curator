@@ -13,7 +13,7 @@ namespace Curator
         private List<string> _excludedTracks;
         private Stack<Func<string>> _undoStack;
 
-        public SongList(IPlayer @object, List<string> rawTracks, List<string> excludedTracks, List<string> approvedTracks)
+        public SongList(List<string> rawTracks, List<string> excludedTracks, List<string> approvedTracks)
         {
             _rawTracks = rawTracks;
             _excludedTracks = excludedTracks;
