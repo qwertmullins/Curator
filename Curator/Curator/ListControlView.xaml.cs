@@ -9,7 +9,7 @@ namespace Curator
     {
         private ISongList _currentList;
         private string _currentTrack;
-        private object _player;
+        private IPlayer _player;
 
         public ListControlView()
         {

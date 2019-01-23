@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Curator
 {
-    class SongList : ISongList
+    public class SongList : ISongList
     {
         private List<string> _tracks;
         private int currentIndex;
@@ -13,7 +13,7 @@ namespace Curator
         private List<string> _excludedTracks;
         private Stack<Func<string>> _undoStack;
 
-        public SongList(List<string> rawTracks, List<string> excludedTracks, List<string> approvedTracks)
+        public SongList(IPlayer @object, List<string> rawTracks, List<string> excludedTracks, List<string> approvedTracks)
         {
             _rawTracks = rawTracks;
             _excludedTracks = excludedTracks;
