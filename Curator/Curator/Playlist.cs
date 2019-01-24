@@ -70,9 +70,11 @@ namespace Curator
         public void ExcludeTrack(string track)
         {
             _excludedTracks.Add(track);
+            _tracks.Remove(track);
             _undoStack.Push(() =>
             {
                 _excludedTracks.Remove(track);
+                _tracks.Add(track);
                 return track;
             });
         }

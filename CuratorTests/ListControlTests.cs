@@ -67,6 +67,22 @@ namespace CuratorTests
             Assert.Equal("track2", currentTrack);
         }
 
+
+        [Fact]
+        public void ExcludedSongWillNotPlayAgain()
+        {
+            var player = new Mock<IPlayer>();
+            var list = new SongList(new[] { "track1", "track2" }.ToList(), new List<string>(), new List<string>());
+            var lcv = new ListControlView();
+            lcv.Init(list, player.Object);
+            lcv.OnThumbDown(null, null);
+            for (int i = 0; i < 3; i++)
+            {
+                lcv.OnSkip(null, null);
+                Assert.NotEqual("track1", list.CurrentTrack);
+            }
+        }
+
         //[Fact]
         //public void PlayerPlaysNextSongWhenSongFinishes()
         //{
