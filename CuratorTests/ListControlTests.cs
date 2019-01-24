@@ -84,7 +84,7 @@ namespace CuratorTests
         }
 
         //[Fact]
-        //public void PlayerPlaysNextSongWhenSongFinishes()
+        //public void PlayerPlaysNextSongWhenCurrentSongFinishes()
         //{
         //    var player = new Mock<IPlayer>();
 
