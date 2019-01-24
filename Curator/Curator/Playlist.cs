@@ -85,5 +85,7 @@ namespace Curator
         }
 
         public bool CanUndo => _undoStack.Any();
+
+        public string CurrentTrack => _tracks[currentIndex];
     }
 }

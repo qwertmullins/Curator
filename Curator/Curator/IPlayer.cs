@@ -2,7 +2,10 @@
 {
     public interface IPlayer
     {
-        void Play(string currentTrack);
+        bool IsPlaying { get; }
+        string Track { get; }
+
+        void Play(string track);
         void PausePlay();
     }
 }

@@ -8,7 +8,6 @@ namespace Curator
     public partial class ListControlView : ContentView
     {
         private ISongList _currentList;
-        private string _currentTrack;
         private IPlayer _player;
 
         public ListControlView()
@@ -16,41 +15,41 @@ namespace Curator
             InitializeComponent();
         }
 
-        public void SetSongList(ISongList list)
+        public void Init(ISongList list, IPlayer player)
         {
             _currentList = list;
+            _player = player;
+            _player.Play(list.CurrentTrack);
         }
 
-        private void OnThumbUp(object sender, EventArgs e)
+        public void OnThumbUp(object sender, EventArgs e)
         {
-            _currentList.ApproveTrack(_currentTrack);
+            _currentList.ApproveTrack(_currentList.CurrentTrack);
         }
 
-        private void OnThumbDown(object sender, EventArgs e)
+        public void OnThumbDown(object sender, EventArgs e)
         {
-            _currentList.ExcludeTrack(_currentTrack);
+            _currentList.ExcludeTrack(_currentList.CurrentTrack);
         }
 
-        private void OnUndo(object sender, EventArgs e)
+        public void OnUndo(object sender, EventArgs e)
         {
             _currentList.Undo();
         }
 
-        private void OnBack(object sender, EventArgs e)
+        public void OnBack(object sender, EventArgs e)
         {
-            _currentTrack = _currentList.GetPreviousTrack();
-            _player.Play(_currentTrack);
+            _player.Play(_currentList.GetPreviousTrack());
         }
 
-        private void OnPausePlay(object sender, EventArgs e)
+        public void OnPausePlay(object sender, EventArgs e)
         {
             _player.PausePlay();
         }
 
-        private void OnSkip(object sender, EventArgs e)
+        public void OnSkip(object sender, EventArgs e)
         {
-            _currentTrack = _currentList.GetNextTrack();
-            _player.Play(_currentTrack);
+            _player.Play(_currentList.GetNextTrack());
         }
     }
 }
