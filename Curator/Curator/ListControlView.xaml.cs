@@ -30,6 +30,7 @@ namespace Curator
         public void OnThumbDown(object sender, EventArgs e)
         {
             _currentList.ExcludeTrack(_currentList.CurrentTrack);
+            _player.Play(_currentList.GetNextTrack());
         }
 
         public void OnUndo(object sender, EventArgs e)
