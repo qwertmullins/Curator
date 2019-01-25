@@ -6,26 +6,24 @@ namespace Curator
 {
     public class SongList : ISongList
     {
-        private List<string> _tracks;
+        public List<string> Tracks;
         private int currentIndex;
-        private List<string> _approvedTracks;
+        public List<string> ApprovedTracks;
         private List<string> _rawTracks;
-        private List<string> _excludedTracks;
-        private Stack<Func<string>> _undoStack;
+        public List<string> ExcludedTracks;
 
         public SongList(List<string> rawTracks, List<string> excludedTracks, List<string> approvedTracks)
         {
             _rawTracks = rawTracks;
-            _excludedTracks = excludedTracks;
-            _approvedTracks = approvedTracks;
-            _tracks = rawTracks.Where(a => !_excludedTracks.Contains(a)).ToList();
-            _undoStack = new Stack<Func<string>>();
+            ExcludedTracks = excludedTracks;
+            ApprovedTracks = approvedTracks;
+            Tracks = rawTracks.Where(a => !ExcludedTracks.Contains(a)).ToList();
         }
 
         void IncrementCurrentTrack()
         {
             currentIndex++;
-            if (currentIndex >= _tracks.Count)
+            if (currentIndex >= Tracks.Count)
                 currentIndex = 0;
         }
 
@@ -33,61 +31,37 @@ namespace Curator
         {
             currentIndex--;
             if (currentIndex < 0)
-                currentIndex = _tracks.Count - 1;
+                currentIndex = Tracks.Count - 1;
         }
         public string GetNextTrack()
         {
             IncrementCurrentTrack();
-            _undoStack.Push(() =>
-            {
-                DecrementCurrentTrack();
-                return _tracks[currentIndex];
-            });
-            return _tracks[currentIndex];
+            return Tracks[currentIndex];
         }
 
         public string GetPreviousTrack()
         {
             DecrementCurrentTrack();
-            _undoStack.Push(() =>
-            {
-                IncrementCurrentTrack();
-                return _tracks[currentIndex];
-            });
-            return _tracks[currentIndex];
+            return Tracks[currentIndex];
         }
 
         public void ApproveTrack(string track)
         {
-            _approvedTracks.Add(track);
-            _undoStack.Push(() =>
-            {
-                _approvedTracks.Remove(track);
-                return null;
-            });
+            ApprovedTracks.Add(track);
         }
 
         public void ExcludeTrack(string track)
         {
-            _excludedTracks.Add(track);
-            _tracks.Remove(track);
-            _undoStack.Push(() =>
-            {
-                _excludedTracks.Remove(track);
-                _tracks.Add(track);
-                return track;
-            });
+            ExcludedTracks.Add(track);
+            Tracks.Remove(track);
         }
 
-        public string Undo()
+        public void IncludeTrack(string track)
         {
-            if (CanUndo)
-                return _undoStack.Pop()();
-            throw new Exception("Tried to undo with nothing to undo!");
+            Tracks.Add(track);
+            ExcludedTracks.Remove(track);
         }
 
-        public bool CanUndo => _undoStack.Any();
-
-        public string CurrentTrack => _tracks[currentIndex];
+        public string CurrentTrack => Tracks[currentIndex];
     }
 }

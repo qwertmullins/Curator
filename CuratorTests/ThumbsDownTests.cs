@@ -10,6 +10,28 @@ namespace CuratorTests
     public class ThumbsDownTests
     {
         [Fact]
+        public void ThumbsDownAddsSongToExcludeList()
+        {
+            var player = new Mock<IPlayer>();
+            var list = new SongList(new[] { "track1", "track2" }.ToList(), new List<string>(), new List<string>());
+            var lcv = new ListControlView();
+            lcv.Init(list, player.Object);
+            lcv.OnThumbDown(null, null);
+            Assert.Contains("track1", list.ExcludedTracks);
+        }
+
+        [Fact]
+        public void ThumbsDownRemovesSongFromTrackList()
+        {
+            var player = new Mock<IPlayer>();
+            var list = new SongList(new[] { "track1", "track2" }.ToList(), new List<string>(), new List<string>());
+            var lcv = new ListControlView();
+            lcv.Init(list, player.Object);
+            lcv.OnThumbDown(null, null);
+            Assert.DoesNotContain("track1", list.Tracks);
+        }
+
+        [Fact]
         public void ThumbsDownGoesToNextSong()
         {
             var player = new Mock<IPlayer>();

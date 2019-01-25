@@ -9,7 +9,7 @@ namespace Curator
     {
         private ISongList _currentList;
         private IPlayer _player;
-
+        private Action _undo;
         public ListControlView()
         {
             InitializeComponent();
@@ -29,13 +29,25 @@ namespace Curator
 
         public void OnThumbDown(object sender, EventArgs e)
         {
-            _currentList.ExcludeTrack(_currentList.CurrentTrack);
+            var badTrack = _currentList.CurrentTrack;
+            _undo = () =>
+            {
+                _currentList.IncludeTrack(badTrack);
+                _player.Play(badTrack);
+            };
+            _currentList.ExcludeTrack(badTrack);
             _player.Play(_currentList.GetNextTrack());
         }
 
+        public bool CanUndo => _undo != null;
+
         public void OnUndo(object sender, EventArgs e)
         {
-            _currentList.Undo();
+            if (CanUndo)
+            {
+                _undo();
+                _undo = null;
+            }
         }
 
         public void OnBack(object sender, EventArgs e)

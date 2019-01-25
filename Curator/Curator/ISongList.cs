@@ -5,10 +5,8 @@
         string GetPreviousTrack();
         string GetNextTrack();
         string CurrentTrack { get; }
-
         void ExcludeTrack(string track);
         void ApproveTrack(string track);
-        string Undo();
-        bool CanUndo { get; }
+        void IncludeTrack(string track);
     }
 }
