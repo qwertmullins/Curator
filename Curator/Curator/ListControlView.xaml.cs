@@ -24,6 +24,7 @@ namespace Curator
 
         public void OnThumbUp(object sender, EventArgs e)
         {
+            _undo = () => { _currentList.UnApproveTrack(_currentList.CurrentTrack); };
             _currentList.ApproveTrack(_currentList.CurrentTrack);
         }
 

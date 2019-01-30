@@ -5,8 +5,11 @@
         string GetPreviousTrack();
         string GetNextTrack();
         string CurrentTrack { get; }
-        void ExcludeTrack(string track);
-        void ApproveTrack(string track);
+
         void IncludeTrack(string track);
+        void ExcludeTrack(string track);
+
+        void ApproveTrack(string track);
+        void UnApproveTrack(string track);
     }
 }

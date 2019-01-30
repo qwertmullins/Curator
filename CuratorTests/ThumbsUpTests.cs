@@ -1,6 +1,5 @@
 ﻿using Curator;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -31,6 +30,17 @@ namespace CuratorTests
             lcv.OnThumbUp(null, null);
             Assert.True(isPlaying);
             Assert.Equal(thumbedUpTrack, currentTrack);
+        }
+
+        [Fact]
+        public void ThumbsUpAddsSongToApprovedList()
+        {
+            var player = new Mock<IPlayer>();
+            var list = new SongList(new[] { "track1", "track2" }.ToList(), new List<string>(), new List<string>());
+            var lcv = new ListControlView();
+            lcv.Init(list, player.Object);
+            lcv.OnThumbUp(null, null);
+            Assert.Contains("track1", list.ApprovedTracks);
         }
     }
 }

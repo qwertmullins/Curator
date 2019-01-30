@@ -62,6 +62,11 @@ namespace Curator
             ExcludedTracks.Remove(track);
         }
 
+        public void UnApproveTrack(string track)
+        {
+            ApprovedTracks.Remove(track);
+        }
+
         public string CurrentTrack => Tracks[currentIndex];
     }
 }
