@@ -1,0 +1,9 @@
+hold thumbs down
+t=0: immediately thumbs downs, starts next song
+t=0.5: vibrates
+t=1: deletes song permanently (queued)
+
+undo once
+undoes last thumbs down action
+undo twice
+undoes second to last thumbs down action
