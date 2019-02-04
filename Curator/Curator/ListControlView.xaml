@@ -10,6 +10,7 @@
             RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,
             Property=Height,Factor=.35,Constant=0}"
             >Current Song Info</Label>
+            <ListView x:Name="PreviousSongsList"/>
             <Grid 
             RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,
             Property=Height,Factor=.7,Constant=0}"

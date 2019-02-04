@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,9 +12,29 @@ namespace Curator
         private ISongList _currentList;
         private IPlayer _player;
         private Action _undo;
+        private ObservableCollection<string> _pastSongs;
         public ListControlView()
         {
             InitializeComponent();
+            _pastSongs = new ObservableCollection<string>();
+            PreviousSongsList.ItemsSource = _pastSongs;
+            var rawTracks = new List<string>();
+            for (int i = 0; i < 20; i++)
+            {
+                rawTracks.Add("track" + i);
+            }
+
+            var player = new DummyPlayer();
+            player.OnPausePlay += () =>
+            {
+                CurrentTrackInfo.Text = $"{player.Track} {(player.IsPlaying ? "" : "(Paused)")}";
+            };
+            player.OnTrackChange += s =>
+             {
+                 _pastSongs.Add(player.Track);
+                 CurrentTrackInfo.Text = s;
+             };
+            Init(new SongList(rawTracks, new List<string>(), new List<string>()), player);
         }
 
         public void Init(ISongList list, IPlayer player)
@@ -64,6 +86,27 @@ namespace Curator
         public void OnSkip(object sender, EventArgs e)
         {
             _player.Play(_currentList.GetNextTrack());
+        }
+    }
+
+    public class DummyPlayer : IPlayer
+    {
+        public bool IsPlaying { get; set; }
+        public string Track { get; set; }
+        public event Action<string> OnTrackChange;
+        public event Action OnPausePlay;
+
+        public void Play(string track)
+        {
+            Track = track;
+            IsPlaying = true;
+            OnTrackChange?.Invoke(track);
+        }
+
+        public void PausePlay()
+        {
+            IsPlaying = !IsPlaying;
+            OnPausePlay?.Invoke();
         }
     }
 }

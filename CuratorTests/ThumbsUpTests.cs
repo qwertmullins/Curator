@@ -42,5 +42,35 @@ namespace CuratorTests
             lcv.OnThumbUp(null, null);
             Assert.Contains("track1", list.ApprovedTracks);
         }
+
+        [Fact]
+        public void UndoThumbsUpRemovesSongFromApprovedList()
+        {
+            var list = new SongList(new[] { "track1", "track2" }.ToList(), new List<string>(), new List<string>());
+            var lcv = new ListControlView();
+            lcv.Init(list, new Mock<IPlayer>().Object);
+            lcv.OnThumbUp(null, null);
+            lcv.OnUndo(null, null);
+            Assert.DoesNotContain("track1", list.ApprovedTracks);
+        }
+
+        [Fact]
+        public void UndoThumbsUpDoesNotChangePlayingSong()
+        {
+            var player = new Mock<IPlayer>();
+            var isPlaying = false;
+            var currentTrack = "";
+            player.Setup(a => a.Play(It.IsAny<string>())).Callback<string>(track =>
+            {
+                isPlaying = true;
+                currentTrack = track;
+            });
+            var list = new SongList(new[] { "track1", "track2" }.ToList(), new List<string>(), new List<string>());
+            var lcv = new ListControlView();
+            lcv.Init(list, player.Object);
+            lcv.OnThumbUp(null, null);
+            lcv.OnUndo(null, null);
+            Assert.Equal("track1", currentTrack);
+        }
     }
 }

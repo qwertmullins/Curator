@@ -7,3 +7,5 @@ undo once
 undoes last thumbs down action
 undo twice
 undoes second to last thumbs down action
+
+price is right wheel showing song list
